@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm install
+      - name: Smoke test (import all modules)
+        run: node -e "Promise.all([import(\"./src/commands.js\"),import(\"./src/telegram.js\"),import(\"./src/discord.js\")]).then(()=>console.log(\"modules import OK\")).catch(e=>{console.error(e);process.exit(1)})"
+      - name: Run tests
+        run: npm test
