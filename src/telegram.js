@@ -10,6 +10,7 @@ export async function startTelegram(token) {
     if (fn) return ctx.reply(fn());
     if (!text.startsWith("/")) return ctx.reply("ไม่เข้าใจ — พิมพ์ /help เพื่อดูคำสั่ง");
   });
-  await bot.start();
+  // grammy bot.start() hang จนกว่า bot stop → อย่า await (รัน background)
+  bot.start();
   console.log("[telegram] bot started");
 }
